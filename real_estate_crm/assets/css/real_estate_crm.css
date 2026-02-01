@@ -1,0 +1,95 @@
+/* Real Estate CRM Custom Styles */
+
+.real-estate-crm-wrapper {
+    padding: 20px;
+}
+
+.stat-card {
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.stat-card h1 {
+    margin: 0;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.stat-card p {
+    margin: 10px 0 0;
+    font-size: 16px;
+}
+
+.bg-primary {
+    background-color: #007bff !important;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.bg-info {
+    background-color: #17a2b8 !important;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.text-white {
+    color: #ffffff !important;
+}
+
+.panel_s {
+    margin-bottom: 20px;
+}
+
+.real-estate-table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.badge-available {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.badge-booked {
+    background-color: #ffc107;
+    color: #212529;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.badge-sold {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.mtop20 {
+    margin-top: 20px;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.bold {
+    font-weight: bold;
+}
