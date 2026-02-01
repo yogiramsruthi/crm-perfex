@@ -5,6 +5,92 @@ All notable changes to the Real Estate CRM plugin will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-02-01
+
+### Added - Customer Portal
+
+#### Customer Portal Module
+- **Customer Dashboard** with comprehensive statistics
+  - Total bookings, amounts, and balance display
+  - Quick links to all portal sections
+  - Recent bookings overview table
+  - Upcoming EMI payments (next 5)
+  - Recent transactions (last 5)
+
+- **My Bookings Module**
+  - View all customer bookings in table format
+  - Booking details: project, plot, dates, amounts
+  - Payment status and type display
+  - Color-coded booking status
+  - Link to detailed booking view
+
+- **Booking Details Page**
+  - Complete booking information panel
+  - Payment information with progress bar
+  - Full EMI schedule for the booking
+  - Payment tracking with dates and modes
+  - Booking notes display
+  - Back navigation to bookings list
+
+- **My Plots Module**
+  - View all assigned plots in card layout
+  - Plot details: size, type, price
+  - Project information display
+  - Plot status badges
+  - Plot descriptions
+  - Empty state messaging
+
+- **EMI Schedule Module**
+  - Statistics: total, paid, pending, overdue EMI
+  - View all EMIs across all bookings
+  - Sortable table with full details
+  - Payment status tracking
+  - Payment dates and modes
+  - Due date display
+
+- **Payment History Module**
+  - Total payments made summary
+  - Total transactions counter
+  - Complete transaction history
+  - Transaction dates and types
+  - Payment modes and references
+  - Transaction descriptions
+
+#### Technical Implementation
+- New client controller (My_real_estate.php)
+- 6 client-facing views
+- Client portal menu integration
+- Security: data isolation per customer
+- Authentication checks on all pages
+- Helper methods for data aggregation
+- Proper routing and URLs
+
+#### Language Support
+- Added 25+ client portal language strings
+- All client-facing labels and messages
+- Empty state messages
+
+#### Security Features
+- Customer authentication required
+- Customer ID validation
+- Data access restricted to own bookings
+- 404 handling for unauthorized access
+
+### Files Added
+- `controllers/My_real_estate.php` - Client portal controller
+- `views/client/dashboard.php` - Customer dashboard
+- `views/client/bookings.php` - Bookings list
+- `views/client/booking_details.php` - Detailed booking view
+- `views/client/plots.php` - My plots view
+- `views/client/emi_schedule.php` - EMI schedule
+- `views/client/payment_history.php` - Payment history
+
+### Modified
+- `config.php` - Added client menu registration
+- `language/english/real_estate_crm_lang.php` - Added portal strings
+
+---
+
 ## [1.0.0] - 2026-02-01
 
 ### Added - Initial Release

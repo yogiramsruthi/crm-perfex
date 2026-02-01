@@ -16,6 +16,15 @@ This plugin extends Perfex CRM with a complete Real Estate Management System, de
 - Upcoming EMI payments tracking
 - Project-wise statistics
 
+### 👤 Customer Portal (NEW)
+- **Customer Dashboard**: Overview of bookings, payments, and EMI
+- **My Bookings**: View all bookings with details
+- **Booking Details**: Complete booking information with EMI schedule
+- **My Plots**: View assigned plots with project information
+- **EMI Schedule**: Track all installment payments across bookings
+- **Payment History**: Complete transaction history
+- **Secure Access**: Customers can only view their own data
+
 ### 🏗️ Projects Management
 - Create and manage multiple real estate projects
 - Track project location, timeline, and status
@@ -130,7 +139,24 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Version
 
-**Current Version**: 1.0.0
+**Current Version**: 1.0.1
+
+**Customer Portal**: ✅ Included
+
+## Changelog
+
+### Version 1.0.1 (2026-02-01)
+- ✅ **NEW**: Customer Portal with 6 views
+- ✅ Dashboard for customers with statistics
+- ✅ My Bookings page with full booking details
+- ✅ My Plots page showing assigned properties
+- ✅ EMI Schedule view across all bookings
+- ✅ Payment History with transaction details
+- ✅ Secure access - customers can only see their own data
+
+### Version 1.0.0 (2026-02-01)
+- Initial release with admin panel
+- Dashboard, Projects, Plots, Bookings, EMI, Accounts, Agents, Team, Settings
 
 ## Author
 

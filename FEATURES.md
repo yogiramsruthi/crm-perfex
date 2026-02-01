@@ -1,6 +1,90 @@
 # Real Estate CRM - Complete Features List
 
-## 📊 Dashboard Module
+## 👤 Customer Portal Module (NEW)
+
+### Portal Access
+- ✅ Secure Customer Login
+- ✅ Authentication Checks on All Pages
+- ✅ Data Isolation (Customers See Only Their Data)
+- ✅ Responsive Design for Mobile/Desktop
+
+### Customer Dashboard
+- ✅ Total Bookings Counter
+- ✅ Total Amount Display
+- ✅ Paid Amount Display
+- ✅ Balance Amount Display
+- ✅ Quick Links to All Sections
+- ✅ My Bookings Overview Table
+- ✅ Upcoming EMI Payments (Next 5)
+- ✅ Recent Transactions (Last 5)
+
+### My Bookings
+- ✅ View All Customer Bookings
+- ✅ Project Name Display
+- ✅ Plot Number Display
+- ✅ Booking Date
+- ✅ Total/Paid/Balance Amounts
+- ✅ Payment Type Display
+- ✅ Booking Status with Color Coding
+- ✅ View Booking Details Link
+
+### Booking Details Page
+- ✅ Complete Booking Information Panel
+- ✅ Payment Information Panel
+- ✅ Payment Progress Bar
+- ✅ Booking Notes Display
+- ✅ Full EMI Schedule Table
+- ✅ EMI Payment Status
+- ✅ Payment Dates and Modes
+- ✅ Back to Bookings Navigation
+
+### My Plots
+- ✅ View All Assigned Plots
+- ✅ Card-Based Layout
+- ✅ Project Name Display
+- ✅ Plot Size and Type
+- ✅ Plot Price Display
+- ✅ Plot Status Badge
+- ✅ Plot Description
+- ✅ Empty State Message
+
+### EMI Schedule
+- ✅ Total EMI Counter
+- ✅ Paid EMI Counter
+- ✅ Pending EMI Counter
+- ✅ Overdue EMI Counter
+- ✅ All EMIs Across All Bookings
+- ✅ Plot Number Column
+- ✅ EMI Number and Due Date
+- ✅ EMI Amount Display
+- ✅ Payment Status with Color Coding
+- ✅ Payment Date and Mode
+- ✅ Sortable Table Format
+
+### Payment History
+- ✅ Total Payments Made Display
+- ✅ Total Transactions Counter
+- ✅ Complete Transaction List
+- ✅ Transaction Date and Type
+- ✅ Transaction Amount Display
+- ✅ Payment Mode Information
+- ✅ Reference Number Display
+- ✅ Transaction Description
+- ✅ Sortable Table Format
+
+### Portal Navigation
+- ✅ Main Portal Menu Item
+- ✅ Dashboard Submenu
+- ✅ My Bookings Submenu
+- ✅ My Plots Submenu
+- ✅ EMI Schedule Submenu
+- ✅ Payment History Submenu
+- ✅ Icon-Based Navigation
+- ✅ Visible Only When Logged In
+
+---
+
+## 📊 Dashboard Module (Admin)
 
 ### Statistics & KPIs
 - ✅ Total Projects Counter

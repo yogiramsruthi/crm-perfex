@@ -5,7 +5,8 @@
 2. [Initial Setup](#initial-setup)
 3. [Module Configuration](#module-configuration)
 4. [User Guide](#user-guide)
-5. [Troubleshooting](#troubleshooting)
+5. [Customer Portal](#customer-portal)
+6. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -213,6 +214,115 @@ The dashboard provides a quick overview:
 - **Recent Bookings**: Last 5 bookings
 - **Upcoming EMI**: Next 10 pending EMI payments
 - **Project Statistics**: Plot status by project
+
+---
+
+## Customer Portal
+
+### Overview
+
+The Customer Portal allows your clients to access their booking information, track payments, and view EMI schedules from a secure, personalized portal.
+
+### Accessing the Customer Portal
+
+#### For Customers
+
+1. **Login to Client Area**
+   - Navigate to your Perfex CRM client login page
+   - Enter your email and password
+   - Click "Login"
+
+2. **Access Real Estate Portal**
+   - Look for "Real Estate CRM" in the sidebar menu
+   - Click to expand and see available sections:
+     - Dashboard
+     - My Bookings
+     - My Plots
+     - EMI Schedule
+     - Payment History
+
+### Customer Portal Features
+
+#### 1. Customer Dashboard
+- View total bookings and amounts
+- See payment status (total, paid, balance)
+- Check upcoming EMI payments
+- View recent transactions
+- Quick links to all sections
+
+#### 2. My Bookings
+- List of all bookings
+- View booking details
+- See plot and project information
+- Check payment status
+- Access detailed booking view
+
+#### 3. Booking Details
+- Complete booking information
+- Payment progress bar
+- Full EMI schedule
+- Payment history for the booking
+- Booking notes
+
+#### 4. My Plots
+- View all assigned plots
+- Plot details (size, type, price)
+- Project information
+- Plot status
+
+#### 5. EMI Schedule
+- All EMI payments across bookings
+- Statistics (total, paid, pending, overdue)
+- Due dates and amounts
+- Payment tracking
+
+#### 6. Payment History
+- Complete transaction history
+- Payment dates and modes
+- Transaction references
+- Total payments made
+
+### For Administrators
+
+#### Setting Up Customer Access
+
+1. **Create/Link Customer**
+   - Ensure customer has a client account in Perfex
+   - Set up login credentials for the customer
+
+2. **Create Bookings**
+   - When creating bookings, select the correct customer
+   - Customer will immediately see their bookings in the portal
+
+3. **Customer Notification**
+   - Inform customers about the portal
+   - Provide login URL and credentials
+   - Share the Customer Portal Guide
+
+### Security Features
+
+- **Data Isolation**: Customers can only see their own data
+- **Authentication Required**: All pages require login
+- **Secure Access**: Customer ID validation on all queries
+- **Session Management**: Automatic timeout protection
+
+### What Customers Can Do
+
+✅ View their bookings  
+✅ Check plot details  
+✅ Monitor EMI schedule  
+✅ View payment history  
+✅ Track payment progress
+
+### What Customers Cannot Do
+
+❌ Create new bookings  
+❌ Edit booking details  
+❌ View other customers' data  
+❌ Make online payments (view only)  
+❌ Access admin functions
+
+For detailed customer portal documentation, see [CUSTOMER_PORTAL_GUIDE.md](CUSTOMER_PORTAL_GUIDE.md)
 
 ---
 

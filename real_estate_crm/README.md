@@ -1,6 +1,6 @@
 # Real Estate CRM Module for Perfex CRM
 
-A comprehensive Real Estate Management System plugin for Perfex CRM that provides complete functionality for managing real estate projects, plots, bookings, EMI payments, agents, and team members.
+A comprehensive Real Estate Management System plugin for Perfex CRM that provides complete functionality for managing real estate projects, plots, bookings, EMI payments, agents, team members, and a customer portal.
 
 ## Features
 
@@ -11,14 +11,24 @@ A comprehensive Real Estate Management System plugin for Perfex CRM that provide
 - **Upcoming EMI Payments**: Track pending installments
 - **Project Statistics**: Plot availability by project
 
-### 2. Projects Management
+### 2. Customer Portal (NEW)
+- **Customer Dashboard**: Overview of bookings, payments, and EMI
+- **My Bookings**: View all bookings with complete details
+- **Booking Details**: Full booking information with EMI schedule
+- **My Plots**: View assigned plots with project information
+- **EMI Schedule**: Track all installment payments
+- **Payment History**: Complete transaction history
+- **Secure Access**: Customers can only view their own data
+- **Mobile Responsive**: Works on all devices
+
+### 3. Projects Management
 - Create and manage real estate projects
 - Track project details: name, location, description
 - Monitor total and available plots per project
 - Set project start and end dates
 - Manage project status (Active/Inactive)
 
-### 3. Plots Management
+### 4. Plots Management
 - Add and manage individual plots
 - Link plots to specific projects
 - Define plot specifications: number, size, type
@@ -26,7 +36,7 @@ A comprehensive Real Estate Management System plugin for Perfex CRM that provide
 - Track plot status: Available, Booked, Sold
 - Automatic status updates based on bookings
 
-### 4. Bookings Management
+### 5. Bookings Management
 - Create customer bookings for plots
 - Link bookings to customers and agents
 - Track total amount, paid amount, and balance
@@ -34,7 +44,7 @@ A comprehensive Real Estate Management System plugin for Perfex CRM that provide
 - Booking status tracking: Pending, Confirmed, Cancelled
 - Automatic plot status updates
 
-### 5. EMI (Installment) Management
+### 6. EMI (Installment) Management
 - Generate EMI schedules automatically
 - Track individual EMI payments
 - Record payment details: date, mode, transaction ID
@@ -42,7 +52,7 @@ A comprehensive Real Estate Management System plugin for Perfex CRM that provide
 - Automatic balance calculations
 - Payment history and records
 
-### 6. Accounts & Transactions
+### 7. Accounts & Transactions
 - Complete transaction history
 - Track all payments and receipts
 - Financial reporting
@@ -50,7 +60,7 @@ A comprehensive Real Estate Management System plugin for Perfex CRM that provide
 - Monthly revenue analysis
 - Transaction filtering and search
 
-### 7. Agents Management (NEW)
+### 8. Agents Management (NEW)
 - Add and manage sales agents
 - Link agents to staff members (optional)
 - Track agent details: contact info, commission rate
@@ -58,14 +68,14 @@ A comprehensive Real Estate Management System plugin for Perfex CRM that provide
 - Agent status management
 - Commission calculations
 
-### 8. Team Management
+### 9. Team Management
 - Assign team members to projects
 - Define team roles and responsibilities
 - Track team member assignments
 - Monitor team performance
 - Team status management
 
-### 9. Settings
+### 10. Settings
 - Configure module preferences
 - Set default EMI interest rates
 - Define booking validity periods
