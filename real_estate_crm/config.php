@@ -14,6 +14,7 @@ define('REAL_ESTATE_CRM_VERSION', '1.0.0');
 // Register module activation hook
 hooks_add_action('admin_init', 'real_estate_crm_init_menu_items');
 hooks_add_action('admin_init', 'real_estate_crm_permissions');
+hooks_add_action('clients_init', 'real_estate_crm_init_client_menu_items');
 hooks_add_filter('module_' . REAL_ESTATE_CRM_MODULE . '_action_links', 'real_estate_crm_action_links');
 
 /**
@@ -159,4 +160,63 @@ function real_estate_crm_action_links($actions)
 {
     $actions[] = '<a href="' . admin_url('real_estate_crm/settings') . '">' . _l('settings') . '</a>';
     return $actions;
+}
+
+/**
+ * Initialize client portal menu items
+ */
+function real_estate_crm_init_client_menu_items()
+{
+    if (is_client_logged_in()) {
+        $CI = &get_instance();
+        
+        // Add main menu item for client portal
+        $CI->app_menu->add_sidebar_menu_item('real_estate_portal', [
+            'name'     => _l('real_estate_crm'),
+            'href'     => site_url('real_estate_crm/my_real_estate/dashboard'),
+            'icon'     => 'fa fa-building',
+            'position' => 30,
+        ]);
+        
+        // Add submenu items
+        $CI->app_menu->add_sidebar_children_item('real_estate_portal', [
+            'slug'     => 'real_estate_portal_dashboard',
+            'name'     => _l('dashboard'),
+            'href'     => site_url('real_estate_crm/my_real_estate/dashboard'),
+            'icon'     => 'fa fa-dashboard',
+            'position' => 1,
+        ]);
+        
+        $CI->app_menu->add_sidebar_children_item('real_estate_portal', [
+            'slug'     => 'real_estate_portal_bookings',
+            'name'     => _l('re_my_bookings'),
+            'href'     => site_url('real_estate_crm/my_real_estate/bookings'),
+            'icon'     => 'fa fa-calendar-check-o',
+            'position' => 2,
+        ]);
+        
+        $CI->app_menu->add_sidebar_children_item('real_estate_portal', [
+            'slug'     => 'real_estate_portal_plots',
+            'name'     => _l('re_my_plots'),
+            'href'     => site_url('real_estate_crm/my_real_estate/plots'),
+            'icon'     => 'fa fa-map-marker',
+            'position' => 3,
+        ]);
+        
+        $CI->app_menu->add_sidebar_children_item('real_estate_portal', [
+            'slug'     => 'real_estate_portal_emi',
+            'name'     => _l('re_emi_schedule'),
+            'href'     => site_url('real_estate_crm/my_real_estate/emi_schedule'),
+            'icon'     => 'fa fa-credit-card',
+            'position' => 4,
+        ]);
+        
+        $CI->app_menu->add_sidebar_children_item('real_estate_portal', [
+            'slug'     => 'real_estate_portal_payments',
+            'name'     => _l('re_payment_history'),
+            'href'     => site_url('real_estate_crm/my_real_estate/payment_history'),
+            'icon'     => 'fa fa-money',
+            'position' => 5,
+        ]);
+    }
 }
