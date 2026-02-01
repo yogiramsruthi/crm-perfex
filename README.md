@@ -6,7 +6,15 @@ A comprehensive Real Estate CRM plugin for Perfex CRM that provides complete fun
 
 This plugin extends Perfex CRM with a complete Real Estate Management System, designed specifically for real estate businesses to manage their projects, properties, customer bookings, payment schedules, sales agents, and team assignments.
 
-## Features
+## Key Features
+
+### 💼 Perfex CRM Integration
+- **Invoice Module Integration**: Auto-generate Perfex invoices for bookings and EMI
+- **Customer Management**: Uses Perfex's native client/contact system
+- **Payment Synchronization**: Automatic payment status updates from invoices
+- **Single Customer Database**: No duplicate customer management
+- **Payment Gateways**: All Perfex payment methods available
+- **Professional Invoices**: Email, PDF, reminders, tracking
 
 ### 🏢 Dashboard
 - Real-time statistics and KPIs
@@ -29,6 +37,17 @@ This plugin extends Perfex CRM with a complete Real Estate Management System, de
 - Create and manage multiple real estate projects
 - Track project location, timeline, and status
 - Monitor plot availability per project
+- **Enhanced Project Details (NEW):**
+  - Project Type (Residential/Commercial/Mixed/Industrial)
+  - Developer Name and Contact Information
+  - Approval/Registration Number
+  - Total Area (acres or sq ft)
+  - Amenities (detailed list)
+  - Payment Terms
+  - Bank Loan Availability
+  - Possession Date
+  - Legal Status (Approved/Pending/Registered)
+  - Project Contact Person, Phone, Email
 - Assign team members to projects
 
 ### 📍 Plots Management
@@ -40,17 +59,24 @@ This plugin extends Perfex CRM with a complete Real Estate Management System, de
 
 ### 📅 Bookings Management
 - Create customer bookings for plots
-- Link bookings to customers and agents
+- Link bookings to **Perfex customers** (integrated)
 - Track payment details (total, paid, balance)
+- **Generate Perfex invoices** for bookings (NEW)
+- **View/track invoice status** directly (NEW)
+- Auto-update booking status from invoice payments
+- Track booking status (Pending, Confirmed, Cancelled)
 - Support EMI and full payment options
 - Booking status tracking (Pending, Confirmed, Cancelled)
 
 ### 💳 EMI Management
 - Automatic EMI schedule generation
 - Track individual installment payments
+- **Generate Perfex invoices for each EMI** (NEW)
+- **Auto-sync payment status from invoices** (NEW)
 - Payment recording with transaction details
 - EMI status tracking (Pending, Paid, Overdue)
 - Automatic balance calculations
+- Due date tracking and reminders
 
 ### 💰 Accounts & Transactions
 - Complete transaction history
@@ -139,11 +165,28 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Version
 
-**Current Version**: 1.0.1
+**Current Version**: 1.0.2
 
-**Customer Portal**: ✅ Included
+**Customer Portal**: ✅ Included  
+**Perfex Integration**: ✅ Complete
+
+## Key Integrations
+
+### Perfex CRM Native Features ✅
+- **Invoice Module**: Automatic invoice generation for bookings and EMI
+- **Customer Management**: Uses Perfex's native client system
+- **Customer Login**: Integrated with Perfex authentication
+- **Payment Tracking**: Auto-sync from Perfex invoice payments
 
 ## Changelog
+
+### Version 1.0.2 (2026-02-01)
+- ✅ **Perfex Invoice Integration**: Generate invoices for bookings and EMI
+- ✅ **Customer Integration**: Use Perfex customers throughout the system
+- ✅ **Payment Sync**: Auto-update booking status from invoice payments
+- ✅ **Enhanced Projects**: Added 12 new project fields (type, developer, amenities, etc.)
+- ✅ **Invoice Generation Buttons**: Easy invoice creation from bookings list
+- ✅ **Comprehensive Integration Guide**: 9,000+ word documentation
 
 ### Version 1.0.1 (2026-02-01)
 - ✅ **NEW**: Customer Portal with 6 views
@@ -157,6 +200,64 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Version 1.0.0 (2026-02-01)
 - Initial release with admin panel
 - Dashboard, Projects, Plots, Bookings, EMI, Accounts, Agents, Team, Settings
+
+## Integration Details
+
+### Perfex CRM Integration
+
+The Real Estate CRM module is **fully integrated** with Perfex CRM's native features:
+
+#### Invoice Module ✅
+- Generate Perfex invoices for bookings
+- Generate Perfex invoices for EMI payments
+- Automatic invoice numbering
+- Professional invoice format with plot/project details
+- Email invoices to customers
+- PDF generation
+- Payment gateway integration (via Perfex)
+- Payment reminders and overdue tracking
+
+#### Customer System ✅
+- Uses Perfex's `tblclients` and `tblcontacts` tables
+- Searchable customer dropdown in forms
+- Single source of truth for customer data
+- No duplicate customer management
+- Access to full customer profiles and history
+
+#### Payment Synchronization ✅
+- Automatic updates when invoices are paid
+- Booking `paid_amount` auto-calculated
+- EMI status changed to "paid" automatically
+- Booking status updated to "confirmed" when fully paid
+- Transaction history automatically recorded
+
+#### Customer Portal ✅
+- Uses Perfex's client authentication system
+- No separate login required
+- Secure session management
+- Access control through Perfex
+
+### How It Works
+
+**Booking with Invoice:**
+1. Create booking → Select Perfex customer
+2. Click "Generate Invoice" → Creates Perfex invoice
+3. Customer pays invoice → Booking status auto-updated
+4. View invoice anytime from bookings list
+
+**EMI with Invoice:**
+1. Generate EMI schedule → Creates installment plan
+2. Generate invoice for each EMI → Links to Perfex invoices
+3. Customer pays EMI invoice → Status auto-updated to "paid"
+4. Track all payments in one place
+
+### Documentation
+
+- **[PERFEX_INTEGRATION_GUIDE.md](PERFEX_INTEGRATION_GUIDE.md)** - Complete integration guide (9,000+ words)
+- **[INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)** - Installation and setup
+- **[CUSTOMER_PORTAL_GUIDE.md](CUSTOMER_PORTAL_GUIDE.md)** - Customer portal usage
+- **[FEATURES.md](FEATURES.md)** - Complete features list
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history
 
 ## Author
 
