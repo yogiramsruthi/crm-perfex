@@ -46,6 +46,19 @@
                                         <label for="enable_sms_notifications"><?php echo _l('re_enable_sms_notifications'); ?></label>
                                     </div>
                                 </div>
+                                
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="auto_generate_invoice" 
+                                               name="auto_generate_invoice" value="1"
+                                               <?php echo (isset($settings['auto_generate_invoice']) && $settings['auto_generate_invoice'] == '1') ? 'checked' : ''; ?>>
+                                        <label for="auto_generate_invoice">
+                                            <?php echo _l('re_auto_generate_invoice'); ?>
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" 
+                                               title="<?php echo _l('re_auto_generate_invoice_help'); ?>"></i>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         

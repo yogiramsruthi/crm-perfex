@@ -705,4 +705,73 @@ class Real_estate_crm_model extends App_Model
         $this->load->model('clients_model');
         return $this->clients_model->get();
     }
+    
+    /**
+     * Get all EMI with complete details
+     */
+    public function get_all_emi_with_details()
+    {
+        $this->db->select('
+            e.*,
+            b.customer_id,
+            b.plot_id,
+            b.project_id,
+            p.plot_number,
+            pr.name as project_name,
+            CONCAT(c.firstname, " ", c.lastname) as customer_name
+        ');
+        $this->db->from(db_prefix() . 'real_estate_emi e');
+        $this->db->join(db_prefix() . 'real_estate_bookings b', 'b.id = e.booking_id', 'left');
+        $this->db->join(db_prefix() . 'real_estate_plots p', 'p.id = b.plot_id', 'left');
+        $this->db->join(db_prefix() . 'real_estate_projects pr', 'pr.id = b.project_id', 'left');
+        $this->db->join(db_prefix() . 'contacts c', 'c.userid = b.customer_id AND c.is_primary = 1', 'left');
+        $this->db->order_by('e.due_date', 'ASC');
+        
+        return $this->db->get()->result_array();
+    }
+    
+    /**
+     * Mark EMI as paid manually
+     */
+    public function mark_emi_paid($emi_id, $payment_date = null)
+    {
+        if (!$payment_date) {
+            $payment_date = date('Y-m-d');
+        }
+        
+        $emi = $this->get_emi($emi_id);
+        if (!$emi) {
+            return false;
+        }
+        
+        $update_data = [
+            'status' => 'paid',
+            'payment_date' => $payment_date,
+            'paid_amount' => $emi['amount']
+        ];
+        
+        $this->db->where('id', $emi_id);
+        $result = $this->db->update(db_prefix() . 'real_estate_emi', $update_data);
+        
+        if ($result) {
+            // Update booking paid amount
+            $booking = $this->get_booking($emi['booking_id']);
+            $new_paid_amount = $booking['paid_amount'] + $emi['amount'];
+            $this->update_booking($emi['booking_id'], [
+                'paid_amount' => $new_paid_amount,
+            ]);
+            
+            // Record transaction
+            $this->add_transaction([
+                'booking_id' => $emi['booking_id'],
+                'amount' => $emi['amount'],
+                'transaction_type' => 'emi_payment',
+                'payment_mode' => 'manual',
+                'transaction_date' => $payment_date,
+                'description' => 'EMI Payment #' . $emi['emi_number'],
+            ]);
+        }
+        
+        return $result;
+    }
 }

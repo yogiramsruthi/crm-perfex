@@ -224,9 +224,15 @@ class Real_estate_crm extends AdminController
             $data = $this->input->post();
             
             if ($id == '') {
-                $id = $this->real_estate_crm_model->add_booking($data);
-                if ($id) {
+                $booking_id = $this->real_estate_crm_model->add_booking($data);
+                if ($booking_id) {
                     set_alert('success', _l('re_booking_added'));
+                    
+                    // Auto-generate invoice if enabled in settings
+                    $settings = $this->real_estate_crm_model->get_settings();
+                    if (isset($settings['auto_generate_invoice']) && $settings['auto_generate_invoice'] == '1') {
+                        $this->real_estate_crm_model->generate_booking_invoice($booking_id);
+                    }
                 }
             } else {
                 $success = $this->real_estate_crm_model->update_booking($id, $data);
@@ -322,6 +328,7 @@ class Real_estate_crm extends AdminController
         }
 
         $data['title'] = _l('re_emi');
+        $data['emi_list'] = $this->real_estate_crm_model->get_all_emi_with_details();
         $this->load->view('admin/emi/manage', $data);
     }
 
@@ -364,6 +371,25 @@ class Real_estate_crm extends AdminController
             }
         }
 
+        redirect(admin_url('real_estate_crm/emi'));
+    }
+    
+    /**
+     * Mark EMI as paid manually
+     */
+    public function mark_emi_paid($emi_id)
+    {
+        if (!has_permission('real_estate_crm', '', 'edit')) {
+            access_denied('real_estate_crm');
+        }
+
+        $result = $this->real_estate_crm_model->mark_emi_paid($emi_id);
+        
+        if ($result) {
+            set_alert('success', _l('re_emi_marked_paid'));
+        } else {
+            set_alert('danger', 'Failed to mark EMI as paid');
+        }
         redirect(admin_url('real_estate_crm/emi'));
     }
 

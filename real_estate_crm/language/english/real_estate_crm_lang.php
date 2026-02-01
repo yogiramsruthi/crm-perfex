@@ -194,3 +194,19 @@ $lang['re_pending_emi'] = 'Pending EMI';
 $lang['re_overdue_emi'] = 'Overdue EMI';
 $lang['re_total_payments_made'] = 'Total Payments Made';
 $lang['re_total_transactions'] = 'Total Transactions';
+
+# Invoice Integration
+$lang['re_invoice_generated'] = 'Invoice generated successfully';
+$lang['re_confirm_generate_invoice'] = 'Are you sure you want to generate an invoice for this?';
+$lang['re_mark_as_paid'] = 'Mark as Paid';
+$lang['re_confirm_mark_paid'] = 'Are you sure you want to mark this EMI as paid?';
+$lang['re_emi_marked_paid'] = 'EMI marked as paid successfully';
+$lang['re_emi_schedule'] = 'EMI Schedule';
+$lang['re_invoice_status'] = 'Invoice Status';
+$lang['re_sync_invoice'] = 'Sync with Invoice';
+$lang['re_auto_generate_invoice'] = 'Auto-generate Invoices';
+$lang['re_auto_generate_invoice_help'] = 'Automatically generate Perfex invoices when bookings and EMIs are created';
+$lang['re_bulk_generate_invoices'] = 'Bulk Generate Invoices';
+$lang['re_generate_all_emi_invoices'] = 'Generate Invoices for All Pending EMIs';
+$lang['re_invoices_generated'] = 'Invoices generated successfully';
+
