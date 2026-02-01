@@ -207,6 +207,7 @@ class Real_estate_crm extends AdminController
         }
 
         $data['title'] = _l('re_bookings');
+        $data['bookings'] = $this->real_estate_crm_model->get_bookings();
         $this->load->view('admin/bookings/manage', $data);
     }
 
@@ -243,6 +244,11 @@ class Real_estate_crm extends AdminController
         $data['title'] = $id != '' ? _l('re_edit_booking') : _l('re_add_booking');
         $data['plots'] = $this->real_estate_crm_model->get_available_plots();
         $data['agents'] = $this->real_estate_crm_model->get_agents(['status' => 'active']);
+        
+        // Load Perfex customers
+        $this->load->model('clients_model');
+        $data['customers'] = $this->clients_model->get();
+        
         $this->load->view('admin/bookings/booking', $data);
     }
 
@@ -260,6 +266,46 @@ class Real_estate_crm extends AdminController
             set_alert('success', _l('re_booking_deleted'));
         }
         redirect(admin_url('real_estate_crm/bookings'));
+    }
+
+    /**
+     * Generate invoice for booking
+     */
+    public function generate_booking_invoice($booking_id)
+    {
+        if (!has_permission('real_estate_crm', '', 'create')) {
+            access_denied('real_estate_crm');
+        }
+
+        $invoice_id = $this->real_estate_crm_model->generate_booking_invoice($booking_id);
+        
+        if ($invoice_id) {
+            set_alert('success', _l('re_invoice_generated'));
+            redirect(admin_url('invoices/invoice/' . $invoice_id));
+        } else {
+            set_alert('danger', 'Failed to generate invoice');
+            redirect(admin_url('real_estate_crm/bookings'));
+        }
+    }
+
+    /**
+     * Generate invoice for EMI
+     */
+    public function generate_emi_invoice($emi_id)
+    {
+        if (!has_permission('real_estate_crm', '', 'create')) {
+            access_denied('real_estate_crm');
+        }
+
+        $invoice_id = $this->real_estate_crm_model->generate_emi_invoice($emi_id);
+        
+        if ($invoice_id) {
+            set_alert('success', _l('re_invoice_generated'));
+            redirect(admin_url('invoices/invoice/' . $invoice_id));
+        } else {
+            set_alert('danger', 'Failed to generate invoice');
+            redirect(admin_url('real_estate_crm/emi'));
+        }
     }
 
     /**

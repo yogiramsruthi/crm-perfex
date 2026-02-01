@@ -88,6 +88,8 @@ $lang['re_booking_invoice'] = 'Booking Invoice';
 $lang['re_generate_invoice'] = 'Generate Invoice';
 $lang['re_view_invoice'] = 'View Invoice';
 $lang['re_invoice_generated'] = 'Invoice generated successfully';
+$lang['re_confirm_generate_invoice'] = 'Generate Perfex invoice for this booking?';
+$lang['re_invoice'] = 'Invoice';
 
 # EMI
 $lang['re_add_emi'] = 'Add EMI';

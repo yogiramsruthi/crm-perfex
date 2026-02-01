@@ -30,7 +30,12 @@
                                     <label for="customer_id"><?php echo _l('re_customer'); ?> <span class="text-danger">*</span></label>
                                     <select class="form-control selectpicker" id="customer_id" name="customer_id" required data-live-search="true">
                                         <option value="">Select Customer</option>
-                                        <!-- Customer options will be populated from Perfex CRM clients -->
+                                        <?php foreach ($customers as $customer): ?>
+                                            <option value="<?php echo $customer['userid']; ?>" 
+                                                    <?php echo (isset($booking) && $booking['customer_id'] == $customer['userid']) ? 'selected' : ''; ?>>
+                                                <?php echo $customer['company']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 
