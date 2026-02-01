@@ -16,6 +16,18 @@ if (!$CI->db->table_exists(db_prefix() . 'real_estate_projects')) {
         `start_date` DATE NULL,
         `end_date` DATE NULL,
         `status` VARCHAR(50) DEFAULT "active",
+        `project_type` VARCHAR(50) NULL,
+        `developer_name` VARCHAR(255) NULL,
+        `approval_number` VARCHAR(100) NULL,
+        `total_area` VARCHAR(100) NULL,
+        `amenities` TEXT NULL,
+        `payment_terms` TEXT NULL,
+        `bank_loan_available` TINYINT(1) DEFAULT 0,
+        `possession_date` DATE NULL,
+        `legal_status` VARCHAR(100) NULL,
+        `contact_person` VARCHAR(255) NULL,
+        `contact_phone` VARCHAR(50) NULL,
+        `contact_email` VARCHAR(255) NULL,
         `created_by` INT NOT NULL,
         `created_at` DATETIME NOT NULL,
         `updated_at` DATETIME NULL,
@@ -47,6 +59,7 @@ if (!$CI->db->table_exists(db_prefix() . 'real_estate_bookings')) {
         `plot_id` INT UNSIGNED NOT NULL,
         `customer_id` INT UNSIGNED NOT NULL,
         `agent_id` INT UNSIGNED NULL,
+        `invoice_id` INT UNSIGNED NULL,
         `booking_date` DATE NOT NULL,
         `total_amount` DECIMAL(15,2) NOT NULL DEFAULT 0.00,
         `paid_amount` DECIMAL(15,2) NOT NULL DEFAULT 0.00,
@@ -60,7 +73,8 @@ if (!$CI->db->table_exists(db_prefix() . 'real_estate_bookings')) {
         PRIMARY KEY (`id`),
         KEY `plot_id` (`plot_id`),
         KEY `customer_id` (`customer_id`),
-        KEY `agent_id` (`agent_id`)
+        KEY `agent_id` (`agent_id`),
+        KEY `invoice_id` (`invoice_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
 }
 
@@ -68,6 +82,7 @@ if (!$CI->db->table_exists(db_prefix() . 'real_estate_emi')) {
     $CI->db->query('CREATE TABLE `' . db_prefix() . 'real_estate_emi` (
         `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
         `booking_id` INT UNSIGNED NOT NULL,
+        `invoice_id` INT UNSIGNED NULL,
         `emi_number` INT NOT NULL,
         `due_date` DATE NOT NULL,
         `amount` DECIMAL(15,2) NOT NULL DEFAULT 0.00,
@@ -80,7 +95,8 @@ if (!$CI->db->table_exists(db_prefix() . 'real_estate_emi')) {
         `created_at` DATETIME NOT NULL,
         `updated_at` DATETIME NULL,
         PRIMARY KEY (`id`),
-        KEY `booking_id` (`booking_id`)
+        KEY `booking_id` (`booking_id`),
+        KEY `invoice_id` (`invoice_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
 }
 

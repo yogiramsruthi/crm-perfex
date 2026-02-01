@@ -523,4 +523,186 @@ class Real_estate_crm_model extends App_Model
         
         return $stats;
     }
+    
+    // ==================== PERFEX INVOICE INTEGRATION ====================
+    
+    /**
+     * Generate Perfex invoice for booking
+     */
+    public function generate_booking_invoice($booking_id)
+    {
+        $booking = $this->get_booking($booking_id);
+        if (!$booking || $booking['invoice_id']) {
+            return false; // Already has invoice or booking doesn't exist
+        }
+        
+        // Load invoices model
+        $this->load->model('invoices_model');
+        
+        // Get plot details
+        $plot = $this->get_plot($booking['plot_id']);
+        
+        // Prepare invoice data
+        $invoice_data = [
+            'clientid' => $booking['customer_id'],
+            'number' => $this->invoices_model->get_invoice_number(),
+            'date' => date('Y-m-d'),
+            'duedate' => date('Y-m-d', strtotime('+30 days')),
+            'subtotal' => $booking['total_amount'],
+            'total' => $booking['total_amount'],
+            'currency' => get_base_currency()->id,
+            'status' => 1, // Unpaid
+            'adminnote' => 'Real Estate Booking - Plot: ' . $plot['plot_number'] . ', Project: ' . $plot['project_name'],
+        ];
+        
+        // Create invoice
+        $invoice_id = $this->invoices_model->add($invoice_data);
+        
+        if ($invoice_id) {
+            // Add invoice item
+            $item_data = [
+                'description' => 'Plot Booking - ' . $plot['project_name'] . ' - Plot No: ' . $plot['plot_number'],
+                'long_description' => 'Booking for plot ' . $plot['plot_number'] . ' in ' . $plot['project_name'] . ' project.<br/>Plot Size: ' . ($plot['plot_size'] ?? 'N/A') . '<br/>Plot Type: ' . ($plot['plot_type'] ?? 'N/A'),
+                'qty' => 1,
+                'rate' => $booking['total_amount'],
+                'rel_id' => $invoice_id,
+                'rel_type' => 'invoice',
+            ];
+            
+            $this->db->insert(db_prefix() . 'itemable', $item_data);
+            
+            // Update booking with invoice_id
+            $this->update_booking($booking_id, ['invoice_id' => $invoice_id]);
+            
+            return $invoice_id;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Generate Perfex invoice for EMI payment
+     */
+    public function generate_emi_invoice($emi_id)
+    {
+        $emi = $this->get_emi($emi_id);
+        if (!$emi || $emi['invoice_id']) {
+            return false; // Already has invoice or EMI doesn't exist
+        }
+        
+        $booking = $this->get_booking($emi['booking_id']);
+        if (!$booking) {
+            return false;
+        }
+        
+        // Load invoices model
+        $this->load->model('invoices_model');
+        
+        // Get plot details
+        $plot = $this->get_plot($booking['plot_id']);
+        
+        // Prepare invoice data
+        $invoice_data = [
+            'clientid' => $booking['customer_id'],
+            'number' => $this->invoices_model->get_invoice_number(),
+            'date' => date('Y-m-d'),
+            'duedate' => $emi['due_date'],
+            'subtotal' => $emi['amount'],
+            'total' => $emi['amount'],
+            'currency' => get_base_currency()->id,
+            'status' => 1, // Unpaid
+            'adminnote' => 'EMI Payment #' . $emi['emi_number'] . ' - Plot: ' . $plot['plot_number'] . ', Project: ' . $plot['project_name'],
+        ];
+        
+        // Create invoice
+        $invoice_id = $this->invoices_model->add($invoice_data);
+        
+        if ($invoice_id) {
+            // Add invoice item
+            $item_data = [
+                'description' => 'EMI Payment #' . $emi['emi_number'] . ' - ' . $plot['project_name'] . ' - Plot No: ' . $plot['plot_number'],
+                'long_description' => 'Installment payment #' . $emi['emi_number'] . ' for plot ' . $plot['plot_number'] . ' in ' . $plot['project_name'] . ' project.',
+                'qty' => 1,
+                'rate' => $emi['amount'],
+                'rel_id' => $invoice_id,
+                'rel_type' => 'invoice',
+            ];
+            
+            $this->db->insert(db_prefix() . 'itemable', $item_data);
+            
+            // Update EMI with invoice_id
+            $this->db->where('id', $emi_id);
+            $this->db->update(db_prefix() . 'real_estate_emi', ['invoice_id' => $invoice_id]);
+            
+            return $invoice_id;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Update booking/EMI status from invoice payment
+     */
+    public function sync_invoice_payment($invoice_id)
+    {
+        // Load invoices model
+        $this->load->model('invoices_model');
+        
+        $invoice = $this->invoices_model->get($invoice_id);
+        if (!$invoice) {
+            return false;
+        }
+        
+        // Check if this invoice is for a booking
+        $booking = $this->db->get_where(db_prefix() . 'real_estate_bookings', ['invoice_id' => $invoice_id])->row_array();
+        if ($booking) {
+            // Update booking paid amount based on invoice
+            $paid_amount = $invoice->total - $invoice->total_left_to_pay;
+            $this->update_booking($booking['id'], [
+                'paid_amount' => $paid_amount,
+                'status' => $invoice->status == 2 ? 'confirmed' : 'pending',
+            ]);
+            return true;
+        }
+        
+        // Check if this invoice is for an EMI
+        $emi = $this->db->get_where(db_prefix() . 'real_estate_emi', ['invoice_id' => $invoice_id])->row_array();
+        if ($emi) {
+            // Update EMI based on invoice payment
+            $paid_amount = $invoice->total - $invoice->total_left_to_pay;
+            $emi_data = [
+                'paid_amount' => $paid_amount,
+                'status' => $invoice->status == 2 ? 'paid' : 'pending',
+            ];
+            
+            if ($invoice->status == 2) {
+                $emi_data['payment_date'] = date('Y-m-d');
+            }
+            
+            $this->db->where('id', $emi['id']);
+            $this->db->update(db_prefix() . 'real_estate_emi', $emi_data);
+            
+            // Update booking paid amount
+            if ($invoice->status == 2) {
+                $booking = $this->get_booking($emi['booking_id']);
+                $new_paid_amount = $booking['paid_amount'] + $paid_amount;
+                $this->update_booking($emi['booking_id'], [
+                    'paid_amount' => $new_paid_amount,
+                ]);
+            }
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Get Perfex customers for dropdown
+     */
+    public function get_perfex_customers()
+    {
+        $this->load->model('clients_model');
+        return $this->clients_model->get();
+    }
 }

@@ -16,6 +16,8 @@ hooks_add_action('admin_init', 'real_estate_crm_init_menu_items');
 hooks_add_action('admin_init', 'real_estate_crm_permissions');
 hooks_add_action('clients_init', 'real_estate_crm_init_client_menu_items');
 hooks_add_filter('module_' . REAL_ESTATE_CRM_MODULE . '_action_links', 'real_estate_crm_action_links');
+hooks_add_action('after_invoice_updated', 'real_estate_crm_invoice_updated');
+hooks_add_action('after_invoice_added', 'real_estate_crm_invoice_added');
 
 /**
  * Register module information
@@ -219,4 +221,25 @@ function real_estate_crm_init_client_menu_items()
             'position' => 5,
         ]);
     }
+}
+
+
+/**
+ * Handle invoice updates - sync with bookings/EMI
+ */
+function real_estate_crm_invoice_updated($invoice_id)
+{
+    $CI = &get_instance();
+    $CI->load->model('real_estate_crm/real_estate_crm_model');
+    $CI->real_estate_crm_model->sync_invoice_payment($invoice_id);
+}
+
+/**
+ * Handle new invoices - sync with bookings/EMI
+ */
+function real_estate_crm_invoice_added($invoice_id)
+{
+    $CI = &get_instance();
+    $CI->load->model('real_estate_crm/real_estate_crm_model');
+    $CI->real_estate_crm_model->sync_invoice_payment($invoice_id);
 }
