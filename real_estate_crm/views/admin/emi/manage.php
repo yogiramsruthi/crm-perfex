@@ -63,15 +63,21 @@
                                                         <a href="<?php echo admin_url('invoices/invoice/' . $emi['invoice_id']); ?>" 
                                                            class="btn btn-sm btn-info" target="_blank" 
                                                            data-toggle="tooltip" title="<?php echo _l('re_view_invoice'); ?>">
-                                                            <i class="fa fa-file-invoice"></i>
+                                                            <i class="fa fa-file-invoice"></i> <?php echo _l('re_view_invoice'); ?>
                                                         </a>
-                                                    <?php elseif (has_permission('real_estate_crm', '', 'create') && $emi['status'] != 'paid'): ?>
+                                                        <small class="text-muted d-block mt-1">
+                                                            <i class="fa fa-info-circle"></i> Booking Invoice (Shared)
+                                                        </small>
+                                                    <?php elseif (has_permission('real_estate_crm', '', 'create')): ?>
                                                         <a href="<?php echo admin_url('real_estate_crm/generate_emi_invoice/' . $emi['id']); ?>" 
                                                            class="btn btn-sm btn-success" 
                                                            data-toggle="tooltip" title="<?php echo _l('re_generate_invoice'); ?>"
                                                            onclick="return confirm('<?php echo _l('re_confirm_generate_invoice'); ?>');">
-                                                            <i class="fa fa-plus"></i>
+                                                            <i class="fa fa-plus"></i> <?php echo _l('re_generate_invoice'); ?>
                                                         </a>
+                                                        <small class="text-muted d-block mt-1">
+                                                            <i class="fa fa-info-circle"></i> Will create booking invoice
+                                                        </small>
                                                     <?php else: ?>
                                                         <span class="text-muted">-</span>
                                                     <?php endif; ?>

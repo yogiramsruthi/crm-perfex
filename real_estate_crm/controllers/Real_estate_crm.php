@@ -295,7 +295,7 @@ class Real_estate_crm extends AdminController
     }
 
     /**
-     * Generate invoice for EMI
+     * Generate invoice for EMI (creates booking invoice if doesn't exist)
      */
     public function generate_emi_invoice($emi_id)
     {
@@ -306,7 +306,7 @@ class Real_estate_crm extends AdminController
         $invoice_id = $this->real_estate_crm_model->generate_emi_invoice($emi_id);
         
         if ($invoice_id) {
-            set_alert('success', _l('re_invoice_generated'));
+            set_alert('success', _l('re_invoice_generated') . ' - One invoice covers all EMIs for this booking.');
             redirect(admin_url('invoices/invoice/' . $invoice_id));
         } else {
             set_alert('danger', 'Failed to generate invoice');

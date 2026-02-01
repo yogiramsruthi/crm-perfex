@@ -527,7 +527,8 @@ class Real_estate_crm_model extends App_Model
     // ==================== PERFEX INVOICE INTEGRATION ====================
     
     /**
-     * Generate Perfex invoice for booking
+     * Generate Perfex invoice for booking (covers all EMIs)
+     * This creates ONE invoice for the entire booking
      */
     public function generate_booking_invoice($booking_id)
     {
@@ -552,17 +553,17 @@ class Real_estate_crm_model extends App_Model
             'total' => $booking['total_amount'],
             'currency' => get_base_currency()->id,
             'status' => 1, // Unpaid
-            'adminnote' => 'Real Estate Booking - Plot: ' . $plot['plot_number'] . ', Project: ' . $plot['project_name'],
+            'adminnote' => 'Real Estate Booking - Plot: ' . $plot['plot_number'] . ', Project: ' . $plot['project_name'] . "\nThis invoice covers the complete booking amount including all EMI installments.",
         ];
         
         // Create invoice
         $invoice_id = $this->invoices_model->add($invoice_data);
         
         if ($invoice_id) {
-            // Add invoice item
+            // Add main booking line item
             $item_data = [
                 'description' => 'Plot Booking - ' . $plot['project_name'] . ' - Plot No: ' . $plot['plot_number'],
-                'long_description' => 'Booking for plot ' . $plot['plot_number'] . ' in ' . $plot['project_name'] . ' project.<br/>Plot Size: ' . ($plot['plot_size'] ?? 'N/A') . '<br/>Plot Type: ' . ($plot['plot_type'] ?? 'N/A'),
+                'long_description' => 'Complete booking for plot ' . $plot['plot_number'] . ' in ' . $plot['project_name'] . ' project.<br/>Plot Size: ' . ($plot['plot_size'] ?? 'N/A') . '<br/>Plot Type: ' . ($plot['plot_type'] ?? 'N/A') . '<br/>Total Amount: ' . app_format_money($booking['total_amount'], get_base_currency()) . '<br/><br/><strong>Payment Schedule:</strong><br/>This amount will be paid through scheduled EMI installments.',
                 'qty' => 1,
                 'rate' => $booking['total_amount'],
                 'rel_id' => $invoice_id,
@@ -574,6 +575,10 @@ class Real_estate_crm_model extends App_Model
             // Update booking with invoice_id
             $this->update_booking($booking_id, ['invoice_id' => $invoice_id]);
             
+            // Link all EMIs to this invoice (if EMI schedule already exists)
+            $this->db->where('booking_id', $booking_id);
+            $this->db->update(db_prefix() . 'real_estate_emi', ['invoice_id' => $invoice_id]);
+            
             return $invoice_id;
         }
         
@@ -581,13 +586,66 @@ class Real_estate_crm_model extends App_Model
     }
     
     /**
-     * Generate Perfex invoice for EMI payment
+     * Generate EMI schedule for a booking
+     * Also generates booking invoice if auto-generate is enabled
+     */
+    public function generate_emi_schedule($booking_id, $data)
+    {
+        $booking = $this->get_booking($booking_id);
+        if (!$booking) {
+            return false;
+        }
+        
+        $num_installments = (int)$data['num_installments'];
+        $start_date = $data['start_date'];
+        $installment_amount = $booking['total_amount'] / $num_installments;
+        
+        // Generate EMI schedule
+        $success = true;
+        for ($i = 1; $i <= $num_installments; $i++) {
+            $due_date = date('Y-m-d', strtotime($start_date . ' +' . ($i - 1) . ' months'));
+            
+            $emi_data = [
+                'booking_id' => $booking_id,
+                'emi_number' => $i,
+                'due_date' => $due_date,
+                'amount' => $installment_amount,
+                'status' => 'pending',
+            ];
+            
+            if (!$this->db->insert(db_prefix() . 'real_estate_emi', $emi_data)) {
+                $success = false;
+                break;
+            }
+        }
+        
+        // Auto-generate booking invoice if enabled and not already created
+        if ($success && !$booking['invoice_id']) {
+            $settings = $this->get_settings();
+            if (isset($settings['auto_generate_invoice']) && $settings['auto_generate_invoice'] == '1') {
+                $invoice_id = $this->generate_booking_invoice($booking_id);
+                
+                // Link all created EMIs to this invoice
+                if ($invoice_id) {
+                    $this->db->where('booking_id', $booking_id);
+                    $this->db->update(db_prefix() . 'real_estate_emi', ['invoice_id' => $invoice_id]);
+                }
+            }
+        }
+        
+        return $success;
+    }
+    
+    /**
+     * DEPRECATED: Individual EMI invoices no longer used
+     * Now using single booking invoice for all EMIs
+     * Keeping for backward compatibility
      */
     public function generate_emi_invoice($emi_id)
     {
         $emi = $this->get_emi($emi_id);
-        if (!$emi || $emi['invoice_id']) {
-            return false; // Already has invoice or EMI doesn't exist
+        if (!$emi) {
+            return false;
         }
         
         $booking = $this->get_booking($emi['booking_id']);
@@ -595,49 +653,22 @@ class Real_estate_crm_model extends App_Model
             return false;
         }
         
-        // Load invoices model
-        $this->load->model('invoices_model');
-        
-        // Get plot details
-        $plot = $this->get_plot($booking['plot_id']);
-        
-        // Prepare invoice data
-        $invoice_data = [
-            'clientid' => $booking['customer_id'],
-            'number' => $this->invoices_model->get_invoice_number(),
-            'date' => date('Y-m-d'),
-            'duedate' => $emi['due_date'],
-            'subtotal' => $emi['amount'],
-            'total' => $emi['amount'],
-            'currency' => get_base_currency()->id,
-            'status' => 1, // Unpaid
-            'adminnote' => 'EMI Payment #' . $emi['emi_number'] . ' - Plot: ' . $plot['plot_number'] . ', Project: ' . $plot['project_name'],
-        ];
-        
-        // Create invoice
-        $invoice_id = $this->invoices_model->add($invoice_data);
-        
-        if ($invoice_id) {
-            // Add invoice item
-            $item_data = [
-                'description' => 'EMI Payment #' . $emi['emi_number'] . ' - ' . $plot['project_name'] . ' - Plot No: ' . $plot['plot_number'],
-                'long_description' => 'Installment payment #' . $emi['emi_number'] . ' for plot ' . $plot['plot_number'] . ' in ' . $plot['project_name'] . ' project.',
-                'qty' => 1,
-                'rate' => $emi['amount'],
-                'rel_id' => $invoice_id,
-                'rel_type' => 'invoice',
-            ];
-            
-            $this->db->insert(db_prefix() . 'itemable', $item_data);
-            
-            // Update EMI with invoice_id
+        // If booking already has an invoice, link EMI to it instead of creating new one
+        if ($booking['invoice_id']) {
             $this->db->where('id', $emi_id);
-            $this->db->update(db_prefix() . 'real_estate_emi', ['invoice_id' => $invoice_id]);
-            
-            return $invoice_id;
+            $this->db->update(db_prefix() . 'real_estate_emi', ['invoice_id' => $booking['invoice_id']]);
+            return $booking['invoice_id'];
         }
         
-        return false;
+        // Otherwise, generate the booking invoice
+        $invoice_id = $this->generate_booking_invoice($booking['id']);
+        if ($invoice_id) {
+            // Link all EMIs to this invoice
+            $this->db->where('booking_id', $booking['id']);
+            $this->db->update(db_prefix() . 'real_estate_emi', ['invoice_id' => $invoice_id]);
+        }
+        
+        return $invoice_id;
     }
     
     /**
