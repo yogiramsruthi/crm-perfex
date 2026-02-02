@@ -195,6 +195,117 @@ class My_real_estate extends ClientsController
     }
 
     /**
+     * Browse available plots for booking
+     */
+    public function browse_plots()
+    {
+        if (!is_client_logged_in()) {
+            redirect(site_url('authentication/login'));
+        }
+
+        $data['title'] = _l('re_browse_plots');
+        
+        // Get all available plots with project details
+        $data['available_plots'] = $this->real_estate_crm_model->get_available_plots_for_customer();
+        
+        // Get all active projects
+        $data['projects'] = $this->real_estate_crm_model->get_projects(['status' => 'active']);
+        
+        $this->data($data);
+        $this->view('real_estate_crm/client/browse_plots');
+        $this->layout();
+    }
+
+    /**
+     * View plot details before booking
+     */
+    public function plot_details($plot_id)
+    {
+        if (!is_client_logged_in()) {
+            redirect(site_url('authentication/login'));
+        }
+
+        $plot = $this->real_estate_crm_model->get_plot($plot_id);
+        
+        if (!$plot || $plot['status'] != 'available') {
+            set_alert('danger', _l('re_plot_not_available'));
+            redirect(site_url('real_estate_crm/my_real_estate/browse_plots'));
+        }
+        
+        $data['title'] = _l('re_plot_details');
+        $data['plot'] = $plot;
+        
+        // Get EMI plans for calculator
+        $data['emi_plans'] = $this->real_estate_crm_model->get_emi_plans(['status' => 'active']);
+        
+        $this->data($data);
+        $this->view('real_estate_crm/client/plot_details');
+        $this->layout();
+    }
+
+    /**
+     * Submit booking request (customer side)
+     */
+    public function submit_booking()
+    {
+        if (!is_client_logged_in()) {
+            redirect(site_url('authentication/login'));
+        }
+
+        if ($this->input->post()) {
+            $customer_id = get_client_user_id();
+            $plot_id = $this->input->post('plot_id');
+            
+            // Verify plot is still available
+            $plot = $this->real_estate_crm_model->get_plot($plot_id);
+            if (!$plot || $plot['status'] != 'available') {
+                set_alert('danger', _l('re_plot_not_available'));
+                redirect(site_url('real_estate_crm/my_real_estate/browse_plots'));
+            }
+            
+            // Create booking data
+            $booking_data = [
+                'plot_id' => $plot_id,
+                'customer_id' => $customer_id,
+                'booking_date' => date('Y-m-d'),
+                'total_amount' => $this->input->post('total_amount'),
+                'paid_amount' => $this->input->post('down_payment', true) ?: 0,
+                'balance_amount' => $this->input->post('total_amount') - ($this->input->post('down_payment', true) ?: 0),
+                'payment_type' => $this->input->post('payment_type'),
+                'status' => 'pending', // Customer bookings start as pending
+                'notes' => $this->input->post('notes'),
+                'created_by' => $customer_id,
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            $booking_id = $this->real_estate_crm_model->add_booking($booking_data);
+            
+            if ($booking_id) {
+                // If EMI payment type, create EMI schedule
+                if ($this->input->post('payment_type') == 'emi') {
+                    $emi_plan_id = $this->input->post('emi_plan_id');
+                    $tenor = $this->input->post('tenor_months');
+                    $interest_rate = $this->input->post('interest_rate');
+                    
+                    $emi_data = [
+                        'number_of_emis' => $tenor,
+                        'interest_rate' => $interest_rate,
+                        'start_date' => $this->input->post('emi_start_date') ?: date('Y-m-d', strtotime('+1 month'))
+                    ];
+                    
+                    $this->real_estate_crm_model->generate_emi_schedule($booking_id, $emi_data);
+                }
+                
+                set_alert('success', _l('re_booking_request_submitted'));
+                redirect(site_url('real_estate_crm/my_real_estate/booking/' . $booking_id));
+            } else {
+                set_alert('danger', _l('re_booking_failed'));
+                redirect(site_url('real_estate_crm/my_real_estate/browse_plots'));
+            }
+        }
+    }
+
+    /**
      * Helper: Get customer's upcoming EMI payments
      */
     private function get_customer_upcoming_emi($customer_id, $limit = 5)

@@ -206,11 +206,19 @@ function real_estate_crm_init_client_menu_items()
         ]);
         
         $CI->app_menu->add_sidebar_children_item('real_estate_portal', [
+            'slug'     => 'real_estate_portal_browse',
+            'name'     => _l('re_browse_plots'),
+            'href'     => site_url('real_estate_crm/my_real_estate/browse_plots'),
+            'icon'     => 'fa fa-search',
+            'position' => 4,
+        ]);
+        
+        $CI->app_menu->add_sidebar_children_item('real_estate_portal', [
             'slug'     => 'real_estate_portal_emi',
             'name'     => _l('re_emi_schedule'),
             'href'     => site_url('real_estate_crm/my_real_estate/emi_schedule'),
             'icon'     => 'fa fa-credit-card',
-            'position' => 4,
+            'position' => 5,
         ]);
         
         $CI->app_menu->add_sidebar_children_item('real_estate_portal', [
@@ -218,7 +226,7 @@ function real_estate_crm_init_client_menu_items()
             'name'     => _l('re_payment_history'),
             'href'     => site_url('real_estate_crm/my_real_estate/payment_history'),
             'icon'     => 'fa fa-money',
-            'position' => 5,
+            'position' => 6,
         ]);
     }
 }

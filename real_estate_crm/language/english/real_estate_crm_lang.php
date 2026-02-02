@@ -210,3 +210,27 @@ $lang['re_bulk_generate_invoices'] = 'Bulk Generate Invoices';
 $lang['re_generate_all_emi_invoices'] = 'Generate Invoices for All Pending EMIs';
 $lang['re_invoices_generated'] = 'Invoices generated successfully';
 
+# Customer Portal - Browse & Booking
+$lang['re_browse_plots'] = 'Browse Plots';
+$lang['re_plot_details'] = 'Plot Details';
+$lang['re_plot_not_available'] = 'This plot is not available for booking';
+$lang['re_booking_request_submitted'] = 'Your booking request has been submitted successfully. Our team will review and contact you soon.';
+$lang['re_booking_failed'] = 'Failed to submit booking request. Please try again.';
+$lang['re_book_this_plot'] = 'Book This Plot';
+$lang['re_down_payment'] = 'Down Payment';
+$lang['re_emi_plan'] = 'EMI Plan';
+$lang['re_select_emi_plan'] = 'Select EMI Plan';
+$lang['re_custom_emi'] = 'Custom EMI';
+$lang['re_tenor_months'] = 'Tenor (Months)';
+$lang['re_interest_rate'] = 'Interest Rate (%)';
+$lang['re_monthly_emi'] = 'Monthly EMI';
+$lang['re_emi_start_date'] = 'EMI Start Date';
+$lang['re_calculate_emi'] = 'Calculate EMI';
+$lang['re_booking_notes'] = 'Booking Notes';
+$lang['re_submit_booking'] = 'Submit Booking Request';
+$lang['re_no_plots_available'] = 'No plots available for booking at the moment';
+$lang['re_filter_by_project'] = 'Filter by Project';
+$lang['re_all_projects'] = 'All Projects';
+$lang['re_enable_customer_booking'] = 'Enable Customer Booking';
+$lang['re_enable_customer_booking_help'] = 'Allow customers to submit booking requests through the portal';
+

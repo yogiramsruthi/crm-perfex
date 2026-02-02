@@ -172,7 +172,38 @@ if (!$CI->db->table_exists(db_prefix() . 'real_estate_settings')) {
         ('default_emi_interest_rate', '10', NOW()),
         ('default_booking_validity', '30', NOW()),
         ('enable_email_notifications', '1', NOW()),
-        ('enable_sms_notifications', '0', NOW())
+        ('enable_sms_notifications', '0', NOW()),
+        ('auto_generate_invoice', '1', NOW()),
+        ('enable_customer_booking', '1', NOW())
+    ");
+}
+
+// Create EMI Plans table (for predefined EMI templates)
+if (!$CI->db->table_exists(db_prefix() . 'real_estate_emi_plans')) {
+    $CI->db->query('CREATE TABLE `' . db_prefix() . 'real_estate_emi_plans` (
+        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        `plan_name` VARCHAR(255) NOT NULL,
+        `tenor_months` INT NOT NULL,
+        `interest_rate` DECIMAL(5,2) NOT NULL DEFAULT 0.00,
+        `down_payment_percent` DECIMAL(5,2) NOT NULL DEFAULT 0.00,
+        `processing_fee` DECIMAL(15,2) DEFAULT 0.00,
+        `min_amount` DECIMAL(15,2) DEFAULT 0.00,
+        `max_amount` DECIMAL(15,2) DEFAULT 0.00,
+        `description` TEXT NULL,
+        `status` VARCHAR(50) DEFAULT "active",
+        `created_by` INT NOT NULL,
+        `created_at` DATETIME NOT NULL,
+        `updated_at` DATETIME NULL,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
+    
+    // Insert sample EMI plans
+    $CI->db->query("INSERT INTO `" . db_prefix() . "real_estate_emi_plans` (`plan_name`, `tenor_months`, `interest_rate`, `down_payment_percent`, `processing_fee`, `description`, `status`, `created_by`, `created_at`) VALUES
+        ('3 Months - 0% Interest', 3, 0.00, 30.00, 0.00, 'Short term payment plan with no interest', 'active', 1, NOW()),
+        ('6 Months - 5% Interest', 6, 5.00, 25.00, 0.00, 'Half year plan with low interest', 'active', 1, NOW()),
+        ('12 Months - 10% Interest', 12, 10.00, 20.00, 0.00, 'One year standard plan', 'active', 1, NOW()),
+        ('24 Months - 12% Interest', 24, 12.00, 20.00, 0.00, 'Two year extended plan', 'active', 1, NOW()),
+        ('36 Months - 15% Interest', 36, 15.00, 15.00, 0.00, 'Three year long term plan', 'active', 1, NOW())
     ");
 }
 
